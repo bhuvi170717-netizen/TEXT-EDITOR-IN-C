@@ -11,6 +11,16 @@
 void initDocument(Document *doc)
 {
     // Teammate will implement
+    doc->count = 0;
+    doc->capacity = INITIAL_CAPACITY;
+
+    doc->lines = malloc(doc->capacity * sizeof(char *));
+
+    if (doc->lines == NULL)
+    {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
     
 }
 
@@ -233,7 +243,7 @@ int loadDocument(Document *doc, const char *filename)
     while (fgets(buffer, MAX_LINE_LENGTH, file) != NULL)
     {
         /* Remove newline character */
-        buffer[strcspn(buffer, "\n")] = '\0';
+       buffer[strcspn(buffer, "\r\n")] = '\0';
 
         /* Resize if necessary */
         if (doc->count == doc->capacity)
@@ -323,11 +333,92 @@ int main(void)
 {
     Document doc;
 
+    char command[20];
+    int position;
+    char text[MAX_LINE_LENGTH];
+    char word[100];
+    char filename[100];
+
     initDocument(&doc);
 
-    /*
-        Command processing will go here.
-    */
+    printf("=====================================\n");
+    printf("        SIMPLE LINE EDITOR\n");
+    printf("=====================================\n");
+
+    showHelp();
+
+    while (1)
+    {
+        printf("\nEnter command: ");
+        scanf("%19s", command);
+
+        if (strcmp(command, "i") == 0)
+        {
+            scanf("%d", &position);
+
+            getchar();
+
+            fgets(text, MAX_LINE_LENGTH, stdin);
+
+            text[strcspn(text, "\n")] = '\0';
+
+            insertLine(&doc, position, text);
+        }
+
+        else if (strcmp(command, "d") == 0)
+        {
+            scanf("%d", &position);
+
+            deleteLine(&doc, position);
+        }
+
+        else if (strcmp(command, "p") == 0)
+        {
+            displayDocument(&doc);
+        }
+
+        else if (strcmp(command, "f") == 0)
+        {
+            scanf("%99s", word);
+
+            searchDocument(&doc, word);
+        }
+
+        else if (strcmp(command, "s") == 0)
+        {
+            scanf("%99s", filename);
+
+            saveDocument(&doc, filename);
+        }
+
+        else if (strcmp(command, "l") == 0)
+        {
+            scanf("%99s", filename);
+
+            loadDocument(&doc, filename);
+        }
+
+        else if (strcmp(command, "stats") == 0)
+        {
+            documentStatistics(&doc);
+        }
+
+        else if (strcmp(command, "h") == 0)
+        {
+            showHelp();
+        }
+
+        else if (strcmp(command, "q") == 0)
+        {
+            printf("Exiting editor...\n");
+            break;
+        }
+
+        else
+        {
+            printf("Unknown command. Type 'h' for help.\n");
+        }
+    }
 
     freeDocument(&doc);
 
