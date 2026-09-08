@@ -42,7 +42,7 @@ void freeDocument(Document *doc)
 void insertLine(Document *doc, int position, const char *text)
 {
     // Teammate will implement
-     Valid insertion positions are:
+    /* Valid insertion positions are:
         1 to count + 1
 
         Example:
