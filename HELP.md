@@ -351,3 +351,362 @@ For a quick reminder of commands, enter:
 ```text
 h
 ```
+
+# Command Examples
+
+The following examples demonstrate every command supported by the Simple Line Editor at least twice.
+
+---
+
+## 1. Insert — `i`
+
+### Example 1: Insert at the beginning
+
+```text
+i 1 Hello World
+```
+
+Output:
+
+```text
+1. Hello World
+```
+
+### Example 2: Insert at the end
+
+If the document currently contains:
+
+```text
+1. Hello World
+2. Welcome to C
+```
+
+Use:
+
+```text
+i 3 Dynamic Memory
+```
+
+Output:
+
+```text
+1. Hello World
+2. Welcome to C
+3. Dynamic Memory
+```
+
+---
+
+## 2. Delete — `d`
+
+### Example 1: Delete a middle line
+
+If the document contains:
+
+```text
+1. Hello
+2. Welcome
+3. C Programming
+```
+
+Use:
+
+```text
+d 2
+```
+
+Output after displaying:
+
+```text
+1. Hello
+2. C Programming
+```
+
+### Example 2: Delete the only line
+
+If the document contains:
+
+```text
+1. Hello
+```
+
+Use:
+
+```text
+d 1
+```
+
+Then:
+
+```text
+p
+```
+
+Output:
+
+```text
+Document is empty.
+```
+
+---
+
+## 3. Display — `p`
+
+### Example 1: Display a non-empty document
+
+```text
+p
+```
+
+Output:
+
+```text
+1. Hello World
+2. Welcome to C
+3. Dynamic Memory
+```
+
+### Example 2: Display an empty document
+
+```text
+p
+```
+
+Output:
+
+```text
+Document is empty.
+```
+
+---
+
+## 4. Search — `f`
+
+### Example 1: Search for an existing word
+
+If the document contains:
+
+```text
+1. Hello World
+2. Welcome to C
+```
+
+Use:
+
+```text
+f Hello
+```
+
+Output:
+
+```text
+Found "Hello" in line 1: Hello World
+```
+
+### Example 2: Search for a word that does not exist
+
+```text
+f Python
+```
+
+Output:
+
+```text
+"Python" not found.
+```
+
+---
+
+## 5. Save — `s`
+
+### Example 1: Save the document
+
+```text
+s document.txt
+```
+
+Output:
+
+```text
+Document saved successfully to document.txt
+```
+
+### Example 2: Save to another file
+
+```text
+s backup.txt
+```
+
+Output:
+
+```text
+Document saved successfully to backup.txt
+```
+
+---
+
+## 6. Load — `l`
+
+### Example 1: Load an existing file
+
+If `document.txt` exists:
+
+```text
+l document.txt
+```
+
+Output:
+
+```text
+Document loaded successfully from document.txt
+```
+
+### Example 2: Load another existing file
+
+If `backup.txt` exists:
+
+```text
+l backup.txt
+```
+
+Output:
+
+```text
+Document loaded successfully from backup.txt
+```
+
+If the file does not exist, the program displays:
+
+```text
+Unable to open file for loading.
+```
+
+---
+
+## 7. Statistics — `stats`
+
+### Example 1: Statistics for a populated document
+
+If the document contains:
+
+```text
+1. Hello World
+2. Welcome to C
+```
+
+Use:
+
+```text
+stats
+```
+
+Output:
+
+```text
+Number of lines: 2
+Number of words: 5
+Number of characters: 24
+```
+
+### Example 2: Statistics for an empty document
+
+```text
+stats
+```
+
+Output:
+
+```text
+Number of lines: 0
+Number of words: 0
+Number of characters: 0
+```
+
+---
+
+## 8. Help — `h`
+
+### Example 1: Display help
+
+```text
+h
+```
+
+Output:
+
+```text
+========== TEXT EDITOR HELP ==========
+
+i <position> <text>  - Insert a line
+d <position>         - Delete a line
+p                    - Display document
+f <word>             - Search document
+s <filename>         - Save document
+l <filename>         - Load document
+stats                - Show statistics
+h                    - Show help
+q                    - Quit
+
+======================================
+```
+
+### Example 2: Display help again
+
+```text
+h
+```
+
+The same help menu is displayed again.
+
+This confirms that the help command can be used repeatedly.
+
+---
+
+## 9. Quit — `q`
+
+The quit command terminates the editor, so the two examples are performed in separate program runs.
+
+### Example 1
+
+```text
+q
+```
+
+Output:
+
+```text
+Exiting editor...
+```
+
+### Example 2
+
+Start the editor again and enter:
+
+```text
+q
+```
+
+Output:
+
+```text
+Exiting editor...
+```
+
+---
+
+# Command Coverage
+
+| Command | Example 1          | Example 2             |
+| ------- | ------------------ | --------------------- |
+| `i`     | Beginning          | End                   |
+| `d`     | Middle line        | Only line             |
+| `p`     | Non-empty document | Empty document        |
+| `f`     | Existing word      | Missing word          |
+| `s`     | `document.txt`     | `backup.txt`          |
+| `l`     | Existing file      | Another existing file |
+| `stats` | Populated document | Empty document        |
+| `h`     | First use          | Repeated use          |
+| `q`     | First program run  | Second program run    |
+
+All supported commands have at least two usage examples.
+
