@@ -36,6 +36,16 @@ void resizeDocument(Document *doc)
 void freeDocument(Document *doc)
 {
     // Teammate will implement
+      for (int i = 0; i < doc->count; i++)
+    {
+        free(doc->lines[i]);
+    }
+
+    free(doc->lines);
+
+    doc->lines = NULL;
+    doc->count = 0;
+    doc->capacity = 0;
 }
 
 
@@ -127,6 +137,16 @@ void deleteLine(Document *doc, int position)
 void displayDocument(const Document *doc)
 {
     // Teammate will implement
+    if (doc->count == 0)
+    {
+        printf("Document is empty.\n");
+        return;
+    }
+
+    for (int i = 0; i < doc->count; i++)
+    {
+        printf("%d. %s\n", i + 1, doc->lines[i]);
+    }
 }
 
 
@@ -145,32 +165,157 @@ int isValidLineNumber(const Document *doc, int position)
 void searchDocument(const Document *doc, const char *word)
 {
     // Teammate will implement
+     int found = 0;
+
+    for (int i = 0; i < doc->count; i++)
+    {
+        if (strstr(doc->lines[i], word) != NULL)
+        {
+            printf("Found \"%s\" in line %d: %s\n",
+                   word, i + 1, doc->lines[i]);
+
+            found = 1;
+        }
+    }
+
+    if (!found)
+    {
+        printf("\"%s\" not found.\n", word);
+    }
 }
 
 
 int saveDocument(const Document *doc, const char *filename)
 {
     // Teammate will implement
-    return 0;
+     FILE *file = fopen(filename, "w");
+
+    if (file == NULL)
+    {
+        printf("Unable to open file for saving.\n");
+        return 0;
+    }
+
+    for (int i = 0; i < doc->count; i++)
+    {
+        fprintf(file, "%s\n", doc->lines[i]);
+    }
+
+    fclose(file);
+
+    printf("Document saved successfully to %s\n", filename);
+
+    return 1;
 }
 
 
 int loadDocument(Document *doc, const char *filename)
 {
     // Teammate will implement
-    return 0;
+     FILE *file = fopen(filename, "r");
+
+    if (file == NULL)
+    {
+        printf("Unable to open file for loading.\n");
+        return 0;
+    }
+
+    /* Clear the current document */
+    for (int i = 0; i < doc->count; i++)
+    {
+        free(doc->lines[i]);
+    }
+
+    doc->count = 0;
+
+    char buffer[MAX_LINE_LENGTH];
+
+    while (fgets(buffer, MAX_LINE_LENGTH, file) != NULL)
+    {
+        /* Remove newline character */
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        /* Resize if necessary */
+        if (doc->count == doc->capacity)
+        {
+            resizeDocument(doc);
+        }
+
+        doc->lines[doc->count] =
+            malloc((strlen(buffer) + 1) * sizeof(char));
+
+        if (doc->lines[doc->count] == NULL)
+        {
+            printf("Memory allocation failed.\n");
+            fclose(file);
+            return 0;
+        }
+
+        strcpy(doc->lines[doc->count], buffer);
+
+        doc->count++;
+    }
+
+    fclose(file);
+
+    printf("Document loaded successfully from %s\n", filename);
+
+    return 1;
 }
 
 
 void documentStatistics(const Document *doc)
 {
     // Teammate will implement
+     int words = 0;
+    int characters = 0;
+
+    for (int i = 0; i < doc->count; i++)
+    {
+        characters += strlen(doc->lines[i]);
+
+        int inWord = 0;
+
+        for (int j = 0; doc->lines[i][j] != '\0'; j++)
+        {
+            if (doc->lines[i][j] == ' ' ||
+                doc->lines[i][j] == '\t')
+            {
+                inWord = 0;
+            }
+            else if (inWord == 0)
+            {
+                words++;
+                inWord = 1;
+            }
+        }
+    }
+
+    printf("Number of lines: %d\n", doc->count);
+    printf("Number of words: %d\n", words);
+    printf("Number of characters: %d\n", characters);
 }
 
 
 void showHelp(void)
 {
     // Teammate will implement
+     printf("\n");
+    printf("========== TEXT EDITOR HELP ==========\n");
+    printf("\n");
+
+    printf("i <position> <text>  - Insert a line\n");
+    printf("d <position>         - Delete a line\n");
+    printf("p                    - Display document\n");
+    printf("f <word>             - Search document\n");
+    printf("s <filename>         - Save document\n");
+    printf("l <filename>         - Load document\n");
+    printf("stats                - Show statistics\n");
+    printf("h                    - Show help\n");
+    printf("q                    - Quit\n");
+
+    printf("\n");
+    printf("======================================\n");
 }
 
 
