@@ -7,7 +7,6 @@
 #define INITIAL_CAPACITY 10
 #define MAX_LINE_LENGTH 500
 
-
 void initDocument(Document *doc)
 {
     // Teammate will implement
@@ -21,9 +20,7 @@ void initDocument(Document *doc)
         printf("Memory allocation failed.\n");
         exit(1);
     }
-    
 }
-
 
 void resizeDocument(Document *doc)
 {
@@ -42,11 +39,10 @@ void resizeDocument(Document *doc)
     doc->lines = temp;
 }
 
-
 void freeDocument(Document *doc)
 {
     // Teammate will implement
-      for (int i = 0; i < doc->count; i++)
+    for (int i = 0; i < doc->count; i++)
     {
         free(doc->lines[i]);
     }
@@ -57,7 +53,6 @@ void freeDocument(Document *doc)
     doc->count = 0;
     doc->capacity = 0;
 }
-
 
 void insertLine(Document *doc, int position, const char *text)
 {
@@ -111,11 +106,10 @@ void insertLine(Document *doc, int position, const char *text)
     doc->count++;
 }
 
-
 void deleteLine(Document *doc, int position)
 {
     // Teammate will implement
-     if (!isValidLineNumber(doc, position))
+    if (!isValidLineNumber(doc, position))
     {
         printf("Invalid line position.\n");
         return;
@@ -143,7 +137,6 @@ void deleteLine(Document *doc, int position)
     */
 }
 
-
 void displayDocument(const Document *doc)
 {
     // Teammate will implement
@@ -159,23 +152,21 @@ void displayDocument(const Document *doc)
     }
 }
 
-
 int isValidLineNumber(const Document *doc, int position)
 {
     // Teammate will implement
-     if (position < 1 || position > doc->count)
+    if (position < 1 || position > doc->count)
     {
-    return 0;
+        return 0;
     }
 
     return 1;
 }
 
-
 void searchDocument(const Document *doc, const char *word)
 {
     // Teammate will implement
-     int found = 0;
+    int found = 0;
 
     for (int i = 0; i < doc->count; i++)
     {
@@ -194,11 +185,10 @@ void searchDocument(const Document *doc, const char *word)
     }
 }
 
-
 int saveDocument(const Document *doc, const char *filename)
 {
     // Teammate will implement
-     FILE *file = fopen(filename, "w");
+    FILE *file = fopen(filename, "w");
 
     if (file == NULL)
     {
@@ -218,11 +208,10 @@ int saveDocument(const Document *doc, const char *filename)
     return 1;
 }
 
-
 int loadDocument(Document *doc, const char *filename)
 {
     // Teammate will implement
-     FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r");
 
     if (file == NULL)
     {
@@ -243,7 +232,7 @@ int loadDocument(Document *doc, const char *filename)
     while (fgets(buffer, MAX_LINE_LENGTH, file) != NULL)
     {
         /* Remove newline character */
-       buffer[strcspn(buffer, "\r\n")] = '\0';
+        buffer[strcspn(buffer, "\r\n")] = '\0';
 
         /* Resize if necessary */
         if (doc->count == doc->capacity)
@@ -273,11 +262,10 @@ int loadDocument(Document *doc, const char *filename)
     return 1;
 }
 
-
 void documentStatistics(const Document *doc)
 {
     // Teammate will implement
-     int words = 0;
+    int words = 0;
     int characters = 0;
 
     for (int i = 0; i < doc->count; i++)
@@ -306,11 +294,10 @@ void documentStatistics(const Document *doc)
     printf("Number of characters: %d\n", characters);
 }
 
-
 void showHelp(void)
 {
     // Teammate will implement
-     printf("\n");
+    printf("\n");
     printf("========== TEXT EDITOR HELP ==========\n");
     printf("\n");
 
@@ -327,7 +314,6 @@ void showHelp(void)
     printf("\n");
     printf("======================================\n");
 }
-
 
 int main(void)
 {
@@ -354,20 +340,38 @@ int main(void)
 
         if (strcmp(command, "i") == 0)
         {
-            scanf("%d", &position);
+            if (scanf("%d", &position) != 1)
+            {
+                printf("Invalid line position. Please enter a number.\n");
+
+                while (getchar() != '\n')
+                {
+                }
+
+                continue;
+            }
 
             getchar();
 
             fgets(text, MAX_LINE_LENGTH, stdin);
 
-            text[strcspn(text, "\n")] = '\0';
+            text[strcspn(text, "\r\n")] = '\0';
 
             insertLine(&doc, position, text);
         }
 
         else if (strcmp(command, "d") == 0)
         {
-            scanf("%d", &position);
+            if (scanf("%d", &position) != 1)
+            {
+                printf("Invalid line position. Please enter a number.\n");
+
+                while (getchar() != '\n')
+                {
+                }
+
+                continue;
+            }
 
             deleteLine(&doc, position);
         }
