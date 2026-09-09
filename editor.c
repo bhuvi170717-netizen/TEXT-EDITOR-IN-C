@@ -390,14 +390,32 @@ int main(void)
 
         else if (strcmp(command, "s") == 0)
         {
-            scanf("%99s", filename);
+            getchar();
+
+            fgets(filename, sizeof(filename), stdin);
+            filename[strcspn(filename, "\r\n")] = '\0';
+
+            if (strlen(filename) == 0)
+            {
+                printf("Filename cannot be empty.\n");
+                continue;
+            }
 
             saveDocument(&doc, filename);
         }
 
         else if (strcmp(command, "l") == 0)
         {
-            scanf("%99s", filename);
+            getchar();
+
+            fgets(filename, sizeof(filename), stdin);
+            filename[strcspn(filename, "\r\n")] = '\0';
+
+            if (strlen(filename) == 0)
+            {
+                printf("Filename cannot be empty.\n");
+                continue;
+            }
 
             loadDocument(&doc, filename);
         }
